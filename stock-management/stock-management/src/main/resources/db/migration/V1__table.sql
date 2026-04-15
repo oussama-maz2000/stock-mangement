@@ -1,19 +1,18 @@
--- V1__create_users_table
-
-CREATE SEQUENCE seq_users
-    START WITH    1
-    INCREMENT BY  1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE         1;
+CREATE TABLE roles(
+                      id BIGSERIAL  PRIMARY KEY,
+                      created_by BIGINT ,
+                      name VARCHAR(60) NOT NULL UNIQUE,
+                      created_at TIMESTAMP    NOT NULL DEFAULT NOW(),
+                      updated_at TIMESTAMP    NOT NULL DEFAULT NOW()
+);
 
 CREATE TABLE users(
-id BIGINT DEFAULT nextval('seq_users') PRIMARY KEY,
+id BIGSERIAL  PRIMARY KEY,
+role_id BIGINT REFERENCES roles(id),
 username VARCHAR(60) NOT NULL UNIQUE,
 email VARCHAR(100) NOT NULL UNIQUE,
-password VARCHAR(255) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL,
 enabled BOOLEAN NOT NULL DEFAULT TRUE,
 created_at TIMESTAMP    NOT NULL DEFAULT NOW(),
 updated_at TIMESTAMP    NOT NULL DEFAULT NOW()
 );
- ALTER SEQUENCE seq_users OWNED BY users.id
