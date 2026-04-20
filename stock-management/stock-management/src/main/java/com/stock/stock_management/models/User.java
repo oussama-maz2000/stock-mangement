@@ -20,16 +20,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 200)
+    private String fullName;
+
     @Column(nullable = false, unique = true, length = 60)
     private String username;
+
     @Column(nullable = false, unique = true, length = 100)
     private String email;
+
+    @Column(nullable = false,  length = 100)
+    private String phone;
 
     @Column(nullable = false, length = 255)
     private String password;
 
     @Column(nullable = false)
     private boolean enabled = true;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
