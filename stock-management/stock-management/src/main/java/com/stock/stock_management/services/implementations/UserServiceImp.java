@@ -5,6 +5,7 @@ import com.stock.stock_management.dtos.user.AddUserDto;
 import com.stock.stock_management.dtos.user.UpdateUserDto;
 import com.stock.stock_management.dtos.user.UserDto;
 import com.stock.stock_management.models.User;
+import com.stock.stock_management.repositories.UserRepo;
 import com.stock.stock_management.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService, UserDetailsService {
+
+    private final UserRepo userRepo;
     @Override
     public void createUser(AddUserDto addUserDto) {
 
@@ -24,7 +27,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public User findUserById(String id) {
-        return null;
+        return userRepo.;
     }
 
     @Override
@@ -58,7 +61,9 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        return userRepo.findByUsername(usernameOrEmail)
+                .or(() -> userRepo.findByEmail(usernameOrEmail))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + usernameOrEmail));
     }
 }
