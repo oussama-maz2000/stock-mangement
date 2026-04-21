@@ -6,15 +6,21 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 import tools.jackson.databind.ObjectMapper;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
+@Component
 public class JwtUtils {
 
     private final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
@@ -78,5 +84,12 @@ public class JwtUtils {
                 UserDto.class
         );
 
+
+
+    }
+
+    public String getJWT(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, "jwt");
+        return cookie != null ? cookie.getValue() : null;
     }
 }
